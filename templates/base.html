@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<label for="file">Select video for conversion</label>
+<input type="file" accept="video/*" id="file">
+<label for="upsc">Upscale</label>
+<input type="checkbox" value="upscale" id="upsc">
+<select id="quality">
+    <option value="4K">4K</option>
+    <option value="2K">2K</option>
+    <option value="FullHD" selected>FullHD</option>
+</select>
+<select name="kek" id="ext">
+    <option value=".mp4">.mp4</option>
+    <option value=".mkv">.mkv</option>
+</select>
+<input type="button" id="button" value="Submit">
+</body>
+</html>
+<script>
+document.getElementById('file').addEventListener('input', function () {
+    var file = document.getElementById('file').files[0];
+    var url = URL.createObjectURL(file);
+    var vid = document.createElement('video');
+    vid.setAttribute('src', url);
+    vid.addEventListener('loadedmetadata', function (e) {
+        console.log(e.target.videoWidth, e.target.videoHeight);
+    })
+})
+<!--document.getElementById('button').addEventListener('click', async function sd() {-->
+<!--    var file = document.getElementById('file').files[0];-->
+<!--    var url = URL.createObjectURL(file);-->
+<!--    vid = document.createElement('video');-->
+<!--    vid.setAttribute('src', url);-->
+<!--        let fd = new FormData();-->
+<!--        let upscale = document.getElementById('upsc');-->
+<!--        if (upscale.checked == true) {-->
+<!--            fd.append("upscale", "up");-->
+<!--        }-->
+<!--        fd.append("file", file);-->
+<!--        fd.append("ext", document.getElementById("ext").value);-->
+<!--        fd.append("quality", document.getElementById("quality").value);-->
+<!--        let response = await fetch('/pt/exp', {method: 'POST', body: fd});-->
+<!--    })-->
+</script>

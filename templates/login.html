@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <label for="username">Login:</label>
+  <input type="text" id="username">
+  <label for="pwd">Password:</label>
+  <input type="password" id="pwd">
+  <input type="button" id="button" value="Submit">
+</body>
+</html>
+<script>
+document.getElementById('button').addEventListener('click', async function sd() {
+  let fd = new FormData();
+  fd.append("username", document.getElementById('username').value);
+  fd.append("password", document.getElementById("pwd").value);
+  let response = await fetch('/login', {method: 'POST', body: fd});
+})
+</script>
