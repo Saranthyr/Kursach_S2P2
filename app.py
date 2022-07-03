@@ -1,5 +1,7 @@
 import datetime
 import flask
+
+import acc
 import prot
 import auth
 
@@ -9,3 +11,4 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=30)
 
 app.register_blueprint(prot.bp)
 app.register_blueprint(auth.bp)
+app.register_blueprint(acc.bp)

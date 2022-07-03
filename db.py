@@ -9,5 +9,4 @@ def conn():
                                   password=config.DB_SETTINGS.db_pwd,
                                   database=config.DB_SETTINGS.db_name)
 
-    cur = connection.cursor()
-    return cur
+    return connection

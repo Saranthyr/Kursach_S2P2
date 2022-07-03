@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <label for="old_pwd">Old password:</label>
+    <input type="password" id="old_pwd">
+    <label for="new_pwd">New password:</label>
+    <input type="password" id="new_pwd">
+    <label for="new_pwd_rep">Repeat new password:</label>
+    <input type="password" id="new_pwd_rep">
+    <input type="button" id="button" value="Submit">
+
+    <input type="button" id="logout">
+</body>
+</html>
+<script>
+    document.getElementById('button').addEventListener('click', async function sd() {
+        var op = document.getElementById('old_pwd').value;
+        var np = document.getElementById('new_pwd').value;
+        var npr = document.getElementById('new_pwd_rep').value;
+        let fd = new FormData();
+        fd.append("old_pwd", op);
+        fd.append("new_pwd", np);
+        fd.append("new_pwd_repeat", npr);
+        let response = await fetch('/{{ username }}/settings', {method: 'POST', body: fd});
+    });
+    document.getElementById('logout').addEventListener('click', async function sd() {
+        let response = await fetch('/logout', {method: 'POST', body: ''});
+    })
+</script>
