@@ -14,9 +14,15 @@
 </html>
 <script>
 document.getElementById('button').addEventListener('click', async function sd() {
-  let fd = new FormData();
-  fd.append("username", document.getElementById('username').value);
-  fd.append("password", document.getElementById("pwd").value);
-  let response = await fetch('/login', {method: 'POST', body: fd});
+    let fd = new FormData();
+    fd.append("username", document.getElementById('username').value);
+    fd.append("password", document.getElementById("pwd").value);
+    let response = await fetch('/login', {method: 'POST', body: fd});
+    if (response.status == 215) {
+        alert('Wrong password!');
+    }
+    if (response.status == 225) {
+        alert('Wrong username!');
+    }
 })
 </script>

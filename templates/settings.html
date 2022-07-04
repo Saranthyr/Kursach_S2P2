@@ -12,7 +12,6 @@
     <label for="new_pwd_rep">Repeat new password:</label>
     <input type="password" id="new_pwd_rep">
     <input type="button" id="button" value="Submit">
-
     <input type="button" id="logout">
 </body>
 </html>
@@ -29,5 +28,10 @@
     });
     document.getElementById('logout').addEventListener('click', async function sd() {
         let response = await fetch('/logout', {method: 'POST', body: ''});
+        if (response.status == 302) {
+            var url = await response.json();
+            var url = url['url'];
+            window.location.replace(url);
+        };
     })
 </script>

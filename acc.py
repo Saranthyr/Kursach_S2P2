@@ -58,3 +58,12 @@ def settings(username):
         else:
             return flask.Response(status=265)
 
+
+@bp.route('/<username>', methods=['GET'])
+@auth_req
+def profile(username):
+    curr_user = flask.session.get('user_id')
+    check_user_exists(username)
+    get_user(username=username, user_id=curr_user)
+    return flask.render_template('profile.html', username=username)
+

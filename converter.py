@@ -4,10 +4,10 @@ import worker
 import os
 from auth import auth_req
 
-bp = flask.Blueprint('prot', __name__, url_prefix='/pt')
+bp = flask.Blueprint('convert', __name__, url_prefix='/pt')
 
 
-@bp.route('/exp', methods=['POST', 'GET'])
+@bp.route('/convert', methods=['POST', 'GET'])
 @auth_req
 def exp():
     if flask.request.method == 'POST':
