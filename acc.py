@@ -59,7 +59,7 @@ def settings(username):
             return flask.Response(status=265)
 
 
-@bp.route('/<username>', methods=['GET'])
+@bp.route('/<username>/profile', methods=['GET'])
 @auth_req
 def profile(username):
     curr_user = flask.session.get('user_id')

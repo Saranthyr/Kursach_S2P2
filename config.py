@@ -13,5 +13,14 @@ class DatabaseSettings:
     db_name: str = _environ.get("DATABASE_NAME", None)
 
 
+class FolderSettings:
+    load_dotenv()
+    _environ = os.environ
+
+    video_folder: str = _environ.get("VIDEO_STORAGE", None)
+    thumbnail_folder: str = _environ.get("THUMBNAIL_STORAGE", None)
+
+
 class Config:
     DB_SETTINGS = DatabaseSettings()
+    STORAGE_SETTINGS = FolderSettings()
