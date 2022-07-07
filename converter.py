@@ -68,7 +68,7 @@ def exp():
         file.save(source)
 
         if worker.convert(source, output, ext, fps, v_btr, a_btr, width, height, timestart, endtime, length) == 400:
-            return flask.make_response(flask.jsonify({'error': 'something went wrong. please, contact admins'}), 220)
+            return flask.Response(status=220)
         else:
             cur.execute('insert into files'
                         ' (id, owner_id, original_name, created_at, size, ext)'
@@ -82,6 +82,6 @@ def exp():
                          ext),)
             cur.close()
             conn.commit()
-            return flask.render_template('converter.html', user_logged=True, username=username)
+            return flask.Response(status=200)
     else:
         return flask.render_template('converter.html', user_logged=True, username=username)

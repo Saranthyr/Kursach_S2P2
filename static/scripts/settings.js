@@ -15,5 +15,8 @@ window.onload = function () {
             if (response.status == 255) {
                 alert('New password does not match')
             }
+            if (response.status == 200) {
+                alert('Change success')
+            }
     });
 }

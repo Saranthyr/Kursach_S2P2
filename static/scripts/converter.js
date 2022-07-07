@@ -40,6 +40,12 @@ window.onload = function () {
             }
         }
         let response = await fetch('/feat/convert', {method: 'POST', body: fd});
+        if (response.status == 220) {
+            alert('Something went wrong. Please contact website admins')
+        }
+        if (response.status == 200){
+            alert('Successful conversion')
+        }
     })
     document.getElementById('time').addEventListener('click', function () {
         if (document.getElementById('time').checked) {
