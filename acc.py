@@ -1,11 +1,14 @@
 import flask
 import werkzeug.security
+
+import auth
 from auth import auth_req
 import db
 
 bp = flask.Blueprint('account', __name__, url_prefix='')
 
 connect = db.conn()
+
 
 def get_user(user_id, username):
     cursor = connect.cursor()
@@ -14,7 +17,7 @@ def get_user(user_id, username):
     cursor.close()
 
     if username != user:
-        flask.abort(403)
+        return user
 
 
 def check_user_exists(username):
@@ -22,7 +25,7 @@ def check_user_exists(username):
     cur.execute('select username from users where username = %s', (username,))
     if cur.fetchone() is None:
         cur.close()
-        flask.abort(404)
+        flask.abort(flask.Response('No such user exists'))
 
 
 @bp.route('/<username>/settings', methods=['POST', 'GET'])
@@ -30,10 +33,13 @@ def check_user_exists(username):
 def settings(username):
     curr_user = flask.session.get('user_id')
     check_user_exists(username)
-    get_user(username=username, user_id=curr_user)
+    user = get_user(username=username, user_id=curr_user)
 
     if flask.request.method == 'GET':
-        return flask.render_template('settings.html', username=username)
+        if user:
+            return flask.redirect(flask.url_for('account.settings', username=user))
+        else:
+            return flask.render_template('settings.html', username=username, user_logged=True)
 
     if flask.request.method == 'POST':
         old_password = flask.request.form.get('old_pwd')
@@ -64,6 +70,13 @@ def settings(username):
 def profile(username):
     curr_user = flask.session.get('user_id')
     check_user_exists(username)
-    get_user(username=username, user_id=curr_user)
-    return flask.render_template('profile.html', username=username)
+    user = get_user(username=username, user_id=curr_user)
+    cur = connect.cursor()
+    cur.execute('select id, ext, original_name from files where owner_id = %s', (curr_user,))
+    vids = cur.fetchall()
+    if user:
+        return flask.redirect(flask.url_for('account.profile', username=user, vids=vids, user_logged=True))
+    else:
+        return flask.render_template('profile.html', username=username,
+                                     user_logged=True, vids=vids)
 

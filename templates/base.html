@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+</head>
+<body>
+{% block content %}{% endblock %}
+<div class="footer">
+    {% if user_logged %}
+        <a href="/feat/convert">Converter</a>
+        <a href="/{{ username }}/profile">Profile</a>
+        <a href="/{{ username }}/settings">Settings</a>
+        <button hidden id="logout"></button>
+        <a onclick="document.getElementById('logout').click()" id="logout_link">Logout</a>
+    {% endif %}
+</div>
+</body>
+</html>
+<script>
+    document.getElementById('logout').addEventListener('click', async function sd() {
+        let response = await fetch('/logout', {method: 'POST', body: ''});
+        if (response.status == 302) {
+            var url = await response.json();
+            var url = url['url'];
+            window.location.replace(url);
+        };
+    })
+</script>

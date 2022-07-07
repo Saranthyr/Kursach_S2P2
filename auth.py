@@ -5,7 +5,6 @@ import db
 import werkzeug.security
 import functools
 
-
 bp = flask.Blueprint('auth', __name__, url_prefix='')
 con = db.conn()
 
@@ -24,7 +23,14 @@ def auth_req(view):
 @bp.route('/login', methods=['POST', 'GET'])
 def login():
     if flask.request.method == 'GET':
-        return flask.render_template('login.html')
+        usr_id = flask.session.get('user_id')
+        if usr_id:
+            cursor = con.cursor()
+            cursor.execute('select username from users where id = %s', (usr_id,))
+            user = cursor.fetchone()[0]
+            return flask.redirect(flask.url_for('account.profile', username=user))
+        else:
+            return flask.render_template('login.html')
     if flask.request.method == 'POST':
         username = flask.request.form.get('username')
         pwd = flask.request.form.get('password')
@@ -41,7 +47,9 @@ def login():
                 flask.session.clear()
                 flask.session.permanent = True
                 flask.session['user_id'] = user_id
-                return flask.Response(status=200)
+                return flask.make_response(flask.jsonify({'url':
+                                                          flask.url_for('account.profile', username=username)}),
+                                           200)
             else:
                 return flask.Response(status=215)
         else:
@@ -63,11 +71,11 @@ def register():
         if cur.fetchone() is None:
             if password == repeat_password:
                 password = werkzeug.security.generate_password_hash(password, method='sha512')
-                cur.execute('insert into users (username, hashed_pswd, id, role_id) values (%s, %s, %s, %s)',
+                cur.execute('insert into users (username, hashed_pswd, id, role) values (%s, %s, %s, %s)',
                             (username, password, str(uuid.uuid4()), '1'))
                 con.commit()
                 cur.close()
-                return flask.Response(status=200)
+                return flask.make_response(flask.jsonify({'url': flask.url_for('account.profile', username=username)}), 200)
             else:
                 return flask.Response(status=255)
         else:

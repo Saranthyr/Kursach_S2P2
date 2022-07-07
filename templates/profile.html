@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}{{ username }} profile{% endblock %}
+{% block content %}
+    <div id="test">
+        <script src="../static/scripts/profile.js"></script>
+        <ul style="font-size: 20px;">
+        {% for vid in vids %}
+            <li><a href="/files/{{ vid[0] }}" class="utility" download>{{ vid[0] }}{{ vid[1] }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -17,7 +17,10 @@ conn = db.conn()
 @bp.route('/convert', methods=['POST', 'GET'])
 @auth_req
 def exp():
+    cur = conn.cursor()
     user = flask.session.get('user_id')
+    cur.execute('select username from users where id = %s', (user,))
+    username = cur.fetchone()[0]
     if flask.request.method == 'POST':
         default_val = None
 
@@ -26,13 +29,14 @@ def exp():
         ext = flask.request.form.get('ext')
         quality = flask.request.form.get('quality', default_val)
         filename = flask.request.form.get('filename')
+        trim = flask.request.form.get('trim', default_val)
         timestart = flask.request.form.get('time_start', default_val)
         length = flask.request.form.get('length', default_val)
         endtime = flask.request.form.get('endtime', default_val)
         fps_input = flask.request.form.get('fps', default_val)
 
         filename = os.path.basename(filename)
-        base_ext = os.path.splitext(filename)[1]
+        orig_fname, base_ext = os.path.splitext(filename)
 
         width = None
         height = None
@@ -66,19 +70,18 @@ def exp():
         if worker.convert(source, output, ext, fps, v_btr, a_btr, width, height, timestart, endtime, length) == 400:
             return flask.make_response(flask.jsonify({'error': 'something went wrong. please, contact admins'}), 220)
         else:
-            cur = conn.cursor()
             cur.execute('insert into files'
-                        ' (id, owner_id, original_name, created_at, size, mime_type)'
+                        ' (id, owner_id, original_name, created_at, size, ext)'
                         ' values (%s, %s, %s, %s, %s, %s)',
                         (name,
                          user,
-                         filename,
+                         orig_fname,
                          datetime.datetime.now(),
                          round(os.path.getsize(config.Config.STORAGE_SETTINGS.video_folder + name + ext) / (1024 * 1024),
                                2),
-                         mimetypes.guess_type(name + ext)[0]),)
+                         ext),)
             cur.close()
             conn.commit()
-            return flask.render_template('converter.html')
+            return flask.render_template('converter.html', user_logged=True, username=username)
     else:
-        return flask.render_template('converter.html')
+        return flask.render_template('converter.html', user_logged=True, username=username)
