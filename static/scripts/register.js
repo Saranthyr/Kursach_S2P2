@@ -9,7 +9,7 @@ document.getElementById('button').addEventListener('click', async function sd() 
         fd.append("pwd_rep", document.getElementById("pwd_rep").value);
 
         let response = await fetch('/register', {method: 'POST', body: fd});
-        if (response.status == 225) {
+        if (response.status == 254 {
             alert('User already exists');
         }
         if (response.status == 255) {
