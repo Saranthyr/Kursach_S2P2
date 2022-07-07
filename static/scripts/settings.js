@@ -7,6 +7,12 @@ document.getElementById('button').addEventListener('click', async function sd() 
         fd.append("new_pwd", np);
         fd.append("new_pwd_repeat", npr);
         let response = await fetch('/{{ username }}/settings', {method: 'POST', body: fd});
+        if (response.status == 265) {
+            alert('Current password does not match')
+        }
+        if (response.status == 255) {
+            alert('New password does not match')
+        }
     });
     document.getElementById('logout').addEventListener('click', async function sd() {
         let response = await fetch('/logout', {method: 'POST', body: ''});
