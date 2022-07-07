@@ -21,4 +21,4 @@ def vid_md(fileid):
     cur = con.cursor()
     cur.execute('select ext from files where id = %s', (fileid,))
     ext = cur.fetchone()[0]
-    return str(flask.url_for('static', filename='/vids/' + fileid + '.' + ext))
+    return str(flask.url_for('static', filename='/vids/' + fileid + ext))
