@@ -24,7 +24,7 @@ def convert(source, name, ext, fps,
 
     command = command + ' -c:v libx264 ' + output
     conv = subprocess.run(command, capture_output=True, text=True)
-    if ("Error" in str(conv.stderr)) or ("Error" in str(conv.stdout)):
+    if ("Error" or "aborting" in str(conv.stderr)) or ("Error" or "aborting" in str(conv.stdout)):
         with open('log.log', 'w') as log:
             log.write(str(conv.stdout))
             log.write(str(conv.stderr))
