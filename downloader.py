@@ -14,11 +14,11 @@ def downloader(fileid):
     cur = con.cursor()
     cur.execute('select owner_id, original_name, ext from files where id = %s', (fileid,))
     owner, fname, ext = cur.fetchone()
-    return flask.send_file(config.Config.STORAGE_SETTINGS.video_folder + '/' + fileid + '.' + ext, download_name=fname + '.' + ext)
+    return flask.send_file(config.Config.STORAGE_SETTINGS.video_folder + '/' + fileid + ext, download_name=fname + '.' + ext)
 
 @bp.route('/vids/<fileid>')
 def vid_md(fileid):
     cur = con.cursor()
     cur.execute('select ext from files where id = %s', (fileid,))
     ext = cur.fetchone()[0]
-    return str(flask.url_for('static', filename='/vids/' + fileid + ext))
+    return str(flask.url_for('static', filename='/vids/' + fileid  + '.'+ ext))
