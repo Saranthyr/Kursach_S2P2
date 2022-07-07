@@ -13,7 +13,7 @@ def convert(source, name, ext, fps,
         command = command + ' -vf scale=' + width\
                   + ':' + height\
                   + ':flags=lanczos,setsar=1:1,fps=' + fps\
-                  + ' -b:v ' + v_bitrate + ' -a:b ' + a_bitrate
+                  + ' -b:v ' + v_bitrate + ' -b:a ' + a_bitrate
 
     if start_time:
         command = command + ' -ss ' + start_time
@@ -24,7 +24,8 @@ def convert(source, name, ext, fps,
 
     command = command + ' -c:v libx264 ' + output
     conv = subprocess.run(command, capture_output=True, text=True)
-    if ("Error" or "aborting" in str(conv.stderr)) or ("Error" or "aborting" in str(conv.stdout)):
+    if ("Error" in str(conv.stderr)) or ("aborting" in str(conv.stderr)) \
+            or ("Error" in str(conv.stdout)) or ("aborting" in str(conv.stdout)):
         with open('log.log', 'w') as log:
             log.write(str(conv.stdout))
             log.write(str(conv.stderr))
